@@ -1,0 +1,95 @@
+.community {
+  padding: 20px;
+  height: calc(100vh - 100px); /* Adjust based on your layout */
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  position: relative; /* Add this to ensure proper positioning */
+}
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.post {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  transition: all 0.3s ease;
+  position: relative; /* Add this to ensure proper positioning */
+  scroll-margin-top: 100px; /* Add this to ensure proper scrolling position */
+}
+
+.highlight-like {
+  animation: highlightLike 2s ease-in-out;
+  border: 2px solid rgba(244, 67, 54, 0.3);
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.3);
+}
+
+.highlight-comment {
+  animation: highlightComment 2s ease-in-out;
+  border: 2px solid rgba(33, 150, 243, 0.3);
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+}
+
+.highlight-reply {
+  animation: highlightReply 2s ease-in-out;
+  border: 2px solid rgba(156, 39, 176, 0.3);
+  box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+}
+
+.comment.highlight-comment {
+  animation: highlightComment 2s ease-in-out;
+  border: 2px solid rgba(33, 150, 243, 0.3);
+  background-color: rgba(33, 150, 243, 0.05);
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+  scroll-margin-top: 100px; /* Add this to ensure proper scrolling position */
+}
+
+@keyframes highlightLike {
+  0% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(244, 67, 54, 0);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes highlightComment {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+    transform: scale(1);
+  }
+}
+
+@keyframes highlightReply {
+  0% {
+    box-shadow: 0 0 0 0 rgba(156, 39, 176, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(156, 39, 176, 0);
+    transform: scale(1.02);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(156, 39, 176, 0);
+    transform: scale(1);
+  }
+} 

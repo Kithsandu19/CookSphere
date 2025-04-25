@@ -1,0 +1,98 @@
+.notifications-page {
+  max-width: 600px;
+  margin: 80px auto 0;
+  padding: 20px;
+}
+
+.notifications-page h1 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.notifications-list {
+  background: white;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item:hover {
+  background-color: #fafafa;
+}
+
+.notification-item.unread {
+  background-color: #f8f8f8;
+}
+
+.notification-icon-wrapper {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.notification-icon {
+  font-size: 20px;
+}
+
+.notification-icon.like {
+  color: #ff3366;
+}
+
+.notification-icon.comment {
+  color: #0095f6;
+}
+
+.notification-icon.reply {
+  color: #8134af;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+  display: block;
+}
+
+.no-notifications {
+  padding: 40px 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.notifications-page.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #999;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .notifications-page {
+    margin-top: 64px;
+    padding: 16px;
+  }
+} 
