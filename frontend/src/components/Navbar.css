@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  background-color: white;
+  background: linear-gradient(90deg, #f8e1f4 0%, #e1d4f8 100%);
   border-bottom: 1px solid #dbdbdb;
   backdrop-filter: blur(8px);
   z-index: 1000;

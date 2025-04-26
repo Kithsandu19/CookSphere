@@ -61,4 +61,18 @@ public class NotificationController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{notificationId}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable String notificationId, @AuthenticationPrincipal OAuth2User principal) {
+        if (principal == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        String userId = principal.getName();
+        Notification notification = interactionService.getNotificationById(notificationId);
+        if (notification == null || !notification.getUserId().equals(userId)) {
+            return ResponseEntity.status(403).build();
+        }
+        interactionService.deleteNotification(notificationId);
+        return ResponseEntity.ok().build();
+    }
 } 

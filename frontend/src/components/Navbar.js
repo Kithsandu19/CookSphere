@@ -11,6 +11,7 @@ import {
   Person as PersonIcon,
   Restaurant as RestaurantIcon,
   Google as GoogleIcon,
+  ChatBubbleOutline as ChatIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import './Navbar.css';
@@ -78,6 +79,7 @@ const Navbar = () => {
       path: '/notifications',
       badge: unreadNotifications > 0 ? unreadNotifications : null
     },
+    { icon: <ChatIcon />, label: 'Chat', path: '/chat' },
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -98,7 +100,7 @@ const Navbar = () => {
               <SearchIcon className="search-icon" />
               <input
                 type="text"
-                placeholder="Search recipes..."
+                placeholder="Search..."
                 className="search-input"
               />
             </div>

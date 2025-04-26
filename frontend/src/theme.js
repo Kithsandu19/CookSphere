@@ -10,12 +10,12 @@ const theme = createTheme({
     },
     secondary: {
       main: '#405DE6', // Instagram blue
-      light: '#5B51D8', // Light blue
+      light: '#5B51D8', // Light blu
       dark: '#C13584', // Deep pink
       contrastText: '#fff',
     },
     background: {
-      default: '#FAFAFA', // Instagram background
+      default: '#FAFAFA', 
       paper: '#FFFFFF',
       gradient: 'linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D, #F56040, #F77737, #FCAF45, #FFDC80)',
       gradientLight: 'linear-gradient(45deg, rgba(64,93,230,0.2), rgba(225,48,108,0.2))',

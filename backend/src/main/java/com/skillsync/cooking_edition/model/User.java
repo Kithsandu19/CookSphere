@@ -14,6 +14,10 @@ public class User {
     private String id;
     private String email;
     private String name;
+    private String bio;
+    private List<String> specialties;
+    private List<String> favoriteRecipes;
+    private boolean isPrivate;
     private List<String> following;
     private String role; // "USER" or "ADMIN"
 }
