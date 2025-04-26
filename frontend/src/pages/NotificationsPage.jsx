@@ -7,6 +7,7 @@ import {
   ChatBubbleRounded as CommentIcon,
   ReplyRounded as ReplyIcon,
 } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import './NotificationsPage.css';
 
 const NotificationsPage = () => {
@@ -59,6 +60,20 @@ const NotificationsPage = () => {
       }
     } catch (error) {
       console.error('Error handling notification click:', error);
+    }
+  };
+
+  const handleDeleteNotification = async (notificationId) => {
+    try {
+      await axios.delete(`/api/notifications/${notificationId}`, {
+        withCredentials: true,
+        headers: {
+          'Authorization': `Bearer ${user.id}`
+        }
+      });
+      setNotifications(notifications.filter(n => n.id !== notificationId));
+    } catch (error) {
+      // Optionally show error
     }
   };
 
@@ -127,6 +142,13 @@ const NotificationsPage = () => {
                   {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true })}
                 </span>
               </div>
+              <button
+                className="notification-delete-btn"
+                onClick={e => { e.stopPropagation(); handleDeleteNotification(notification.id); }}
+                title="Delete notification"
+              >
+                <DeleteIcon fontSize="small" />
+              </button>
             </div>
           ))
         )}

@@ -139,6 +139,9 @@ public class PostController {
                     for (MultipartFile file : media) {
                         // Generate a unique filename
                         String originalFilename = file.getOriginalFilename();
+                        if (originalFilename == null) {
+                            originalFilename = "file";
+                        }
                         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
                         String filename = UUID.randomUUID().toString() + extension;
                         
@@ -223,8 +226,17 @@ public class PostController {
             @RequestParam(required = false) Integer cookingTime,
             @RequestParam(required = false) Integer servings) {
         
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+        String userId = oauth2User.getName();
         return postRepository.findById(id)
                 .map(post -> {
+                    if (!post.getUserId().equals(userId)) {
+                        return ResponseEntity.status(403).body("Forbidden: You can only edit your own posts.");
+                    }
                     // Validate number of images
                     if (media != null && !media.isEmpty() && mediaType != null && 
                         mediaType.equals("image") && media.size() > MAX_IMAGES) {
@@ -254,6 +266,9 @@ public class PostController {
                             for (MultipartFile file : media) {
                                 // Generate a unique filename
                                 String originalFilename = file.getOriginalFilename();
+                                if (originalFilename == null) {
+                                    originalFilename = "file";
+                                }
                                 String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
                                 String filename = UUID.randomUUID().toString() + extension;
                                 
@@ -295,8 +310,17 @@ public class PostController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePost(@PathVariable String id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
+        String userId = oauth2User.getName();
         return postRepository.findById(id)
                 .map(post -> {
+                    if (!post.getUserId().equals(userId)) {
+                        return ResponseEntity.status(403).body("Forbidden: You can only delete your own posts.");
+                    }
                     postRepository.delete(post);
                     return ResponseEntity.ok().build();
                 })

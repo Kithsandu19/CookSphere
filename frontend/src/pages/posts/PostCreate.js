@@ -15,7 +15,12 @@ import {
   ListItemSecondaryAction,
   Divider,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Card,
+  CardContent,
+  Stepper,
+  Step,
+  StepLabel
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -212,247 +217,195 @@ const PostCreate = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Paper sx={{ p: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          Create New Post
-        </Typography>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            {/* Basic Information */}
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                label="Title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                multiline
-                rows={2}
-                label="Description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                label="Content"
-                name="content"
-                value={formData.content}
-                onChange={handleInputChange}
-              />
-            </Grid>
-
-            {/* Media Upload */}
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Media Upload
-              </Typography>
-              <input
-                accept="image/*,video/*"
-                style={{ display: 'none' }}
-                id="media-upload"
-                multiple
-                type="file"
-                onChange={handleMediaChange}
-              />
-              <label htmlFor="media-upload">
-                <Button
-                  variant="contained"
-                  component="span"
-                  startIcon={<CloudUploadIcon />}
-                  disabled={mediaFiles.length >= 3}
-                >
-                  Upload Media
-                </Button>
-              </label>
-              {mediaError && (
-                <Typography color="error" variant="body2" sx={{ mt: 1 }}>
-                  {mediaError}
-                </Typography>
-              )}
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                Maximum 3 media files allowed (photos and videos)
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Videos must be 30 seconds or less
-              </Typography>
-              <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 2 }}>
-                {mediaPreviews.map((preview, index) => (
-                  <Box key={index} sx={{ position: 'relative' }}>
-                    {preview.type === 'image' ? (
-                      <img
-                        src={preview.url}
-                        alt={`Preview ${index + 1}`}
-                        style={{ width: 200, height: 200, objectFit: 'cover' }}
-                      />
-                    ) : (
-                      <video
-                        src={preview.url}
-                        style={{ width: 200, height: 200, objectFit: 'cover' }}
-                      />
-                    )}
-                    <IconButton
-                      sx={{
-                        position: 'absolute',
-                        top: 8,
-                        right: 8,
-                        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-                      }}
-                      onClick={() => handleRemoveMedia(index)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+    <Box sx={{ bgcolor: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%)', minHeight: '100vh', py: 6 }}>
+      <Container maxWidth="sm">
+        <Card elevation={4} sx={{ borderRadius: 4, p: 3, boxShadow: 6 }}>
+          <CardContent>
+            <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main', mb: 2, textAlign: 'center' }}>
+              Create a New Recipe
+            </Typography>
+            <Divider sx={{ mb: 3 }} />
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Recipe Title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    fullWidth
+                    required
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Short Description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    fullWidth
+                    required
+                    multiline
+                    minRows={2}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Full Content (optional)"
+                    name="content"
+                    value={formData.content}
+                    onChange={handleInputChange}
+                    fullWidth
+                    multiline
+                    minRows={3}
+                    variant="outlined"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mb: 1 }}>Media (Images/Videos)</Typography>
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    startIcon={<CloudUploadIcon />}
+                    sx={{ mb: 1 }}
+                  >
+                    Upload Media
+                    <input
+                      type="file"
+                      hidden
+                      multiple
+                      accept="image/*,video/*"
+                      onChange={handleMediaChange}
+                    />
+                  </Button>
+                  {mediaError && <Alert severity="error" sx={{ mb: 1 }}>{mediaError}</Alert>}
+                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 1 }}>
+                    {mediaPreviews.map((media, idx) => (
+                      <Box key={idx} sx={{ position: 'relative' }}>
+                        {media.type === 'image' ? (
+                          <img src={media.url} alt="preview" style={{ width: 80, height: 80, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee' }} />
+                        ) : (
+                          <video src={media.url} style={{ width: 80, height: 80, borderRadius: 8, border: '1px solid #eee' }} controls />
+                        )}
+                        <IconButton size="small" sx={{ position: 'absolute', top: 0, right: 0, bgcolor: 'white' }} onClick={() => handleRemoveMedia(idx)}>
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
+                    ))}
                   </Box>
-                ))}
-              </Box>
-            </Grid>
-
-            {/* Recipe Details */}
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Recipe Details
-              </Typography>
-              <Grid container spacing={2}>
+                </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    fullWidth
-                    type="number"
                     label="Cooking Time (minutes)"
                     name="cookingTime"
                     value={formData.cookingTime}
                     onChange={handleInputChange}
+                    type="number"
+                    fullWidth
+                    variant="outlined"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    fullWidth
-                    type="number"
                     label="Servings"
                     name="servings"
                     value={formData.servings}
                     onChange={handleInputChange}
+                    type="number"
+                    fullWidth
+                    variant="outlined"
                   />
                 </Grid>
-              </Grid>
-            </Grid>
-
-            {/* Ingredients */}
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Ingredients
-              </Typography>
-              <List>
-                {formData.ingredients.map((ingredient, index) => (
-                  <ListItem key={index}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mb: 1 }}>Ingredients</Typography>
+                  <List>
+                    {formData.ingredients.map((ingredient, idx) => (
+                      <ListItem key={idx} sx={{ pl: 0 }}>
                         <TextField
-                          fullWidth
-                          label="Ingredient"
+                          label={`Ingredient ${idx + 1}`}
                           value={ingredient}
-                          onChange={(e) => handleArrayInputChange(index, e.target.value, 'ingredients')}
+                          onChange={e => handleArrayInputChange(idx, e.target.value, 'ingredients')}
+                          sx={{ mr: 2 }}
                         />
-                      </Grid>
-                      <Grid item xs={5}>
-                        <TextField
-                          fullWidth
-                          label="Amount"
-                          value={formData.amounts[index]}
-                          onChange={(e) => handleArrayInputChange(index, e.target.value, 'amounts')}
-                        />
-                      </Grid>
-                      <Grid item xs={2}>
-                        <IconButton
-                          edge="end"
-                          onClick={() => removeArrayItem(index, 'ingredients')}
-                        >
+                        <IconButton onClick={() => removeArrayItem(idx, 'ingredients')} disabled={formData.ingredients.length === 1}>
                           <DeleteIcon />
                         </IconButton>
-                      </Grid>
-                    </Grid>
-                  </ListItem>
-                ))}
-              </List>
-              <Button
-                startIcon={<AddIcon />}
-                onClick={() => addArrayItem('ingredients')}
-                sx={{ mt: 1 }}
-              >
-                Add Ingredient
-              </Button>
-            </Grid>
-
-            {/* Instructions */}
-            <Grid item xs={12}>
-              <Typography variant="h6" gutterBottom>
-                Instructions
-              </Typography>
-              <List>
-                {formData.instructions.map((instruction, index) => (
-                  <ListItem key={index}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={10}>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Button startIcon={<AddIcon />} onClick={() => addArrayItem('ingredients')} sx={{ mt: 1 }}>
+                    Add Ingredient
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mb: 1 }}>Amounts (optional)</Typography>
+                  <List>
+                    {formData.amounts.map((amount, idx) => (
+                      <ListItem key={idx} sx={{ pl: 0 }}>
                         <TextField
-                          fullWidth
-                          label={`Step ${index + 1}`}
-                          value={instruction}
-                          onChange={(e) => handleArrayInputChange(index, e.target.value, 'instructions')}
+                          label={`Amount ${idx + 1}`}
+                          value={amount}
+                          onChange={e => handleArrayInputChange(idx, e.target.value, 'amounts')}
+                          sx={{ mr: 2 }}
                         />
-                      </Grid>
-                      <Grid item xs={2}>
-                        <IconButton
-                          edge="end"
-                          onClick={() => removeArrayItem(index, 'instructions')}
-                        >
+                        <IconButton onClick={() => removeArrayItem(idx, 'amounts')} disabled={formData.amounts.length === 1}>
                           <DeleteIcon />
                         </IconButton>
-                      </Grid>
-                    </Grid>
-                  </ListItem>
-                ))}
-              </List>
-              <Button
-                startIcon={<AddIcon />}
-                onClick={() => addArrayItem('instructions')}
-                sx={{ mt: 1 }}
-              >
-                Add Step
-              </Button>
-            </Grid>
-
-            {/* Submit Button */}
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={loading}
-                sx={{ mt: 2 }}
-              >
-                {loading ? <CircularProgress size={24} /> : 'Create Post'}
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Paper>
-    </Container>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Button startIcon={<AddIcon />} onClick={() => addArrayItem('amounts')} sx={{ mt: 1 }}>
+                    Add Amount
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mb: 1 }}>Cooking Steps</Typography>
+                  <List>
+                    {formData.instructions.map((step, idx) => (
+                      <ListItem key={idx} sx={{ pl: 0 }}>
+                        <TextField
+                          label={`Step ${idx + 1}`}
+                          value={step}
+                          onChange={e => handleArrayInputChange(idx, e.target.value, 'instructions')}
+                          sx={{ mr: 2 }}
+                        />
+                        <IconButton onClick={() => removeArrayItem(idx, 'instructions')} disabled={formData.instructions.length === 1}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Button startIcon={<AddIcon />} onClick={() => addArrayItem('instructions')} sx={{ mt: 1 }}>
+                    Add Cooking Step
+                  </Button>
+                </Grid>
+                {error && (
+                  <Grid item xs={12}>
+                    <Alert severity="error">{error}</Alert>
+                  </Grid>
+                )}
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    disabled={loading}
+                    sx={{ mt: 2, fontWeight: 700, fontSize: 18, py: 1.5 }}
+                    startIcon={loading ? <CircularProgress size={24} /> : null}
+                  >
+                    {loading ? 'Posting...' : 'Create Recipe'}
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+      </Container>
+    </Box>
   );
 };
 

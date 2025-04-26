@@ -168,4 +168,12 @@ public class InteractionService {
         notification.setRead(true);
         notificationRepository.save(notification);
     }
+
+    public Notification getNotificationById(String notificationId) {
+        return notificationRepository.findById(notificationId).orElse(null);
+    }
+
+    public void deleteNotification(String notificationId) {
+        notificationRepository.deleteById(notificationId);
+    }
 } 

@@ -17,6 +17,7 @@ import LearningPlans from './pages/learning/LearningPlans';
 import LearningPlanDetail from './pages/learning/LearningPlanDetail';
 import NotificationsPage from './pages/NotificationsPage';
 import Error from './pages/Error';
+import CommunityChatPage from './pages/CommunityChatPage';
 
 function App() {
   return (
@@ -112,6 +113,14 @@ function App() {
           element={
             <PrivateRoute>
               <LearningPlanDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="chat"
+          element={
+            <PrivateRoute>
+              <CommunityChatPage />
             </PrivateRoute>
           }
         />
