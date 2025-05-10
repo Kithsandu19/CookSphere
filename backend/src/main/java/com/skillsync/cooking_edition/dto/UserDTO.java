@@ -14,4 +14,5 @@ public class UserDTO {
     private boolean isPrivate;
     private List<String> following;
     private String role;
+    private String profileImageUrl;
 } 

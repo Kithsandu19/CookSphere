@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.StringUtils;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -119,6 +125,7 @@ public class UserController {
             updatedUser.setSpecialties(profileUpdateRequest.getSpecialties());
             updatedUser.setFavoriteRecipes(profileUpdateRequest.getFavoriteRecipes());
             updatedUser.setPrivate(profileUpdateRequest.isPrivate());
+            updatedUser.setProfileImageUrl(profileUpdateRequest.getProfileImageUrl());
 
             User savedUser = userService.updateProfile(userId, updatedUser);
             UserDTO userDTO = convertToDTO(savedUser);
@@ -142,13 +149,28 @@ public class UserController {
 
             String userId = authentication.getName();
             logger.info("Fetching profile for user: {}", userId);
-            
-            User user = userService.getUserById(userId);
-            if (user == null) {
-                logger.warn("User not found: {}", userId);
-                return ResponseEntity.notFound().build();
+            User user = null;
+            try {
+                user = userService.getUserById(userId);
+            } catch (RuntimeException e) {
+                // User not found, auto-create
+                logger.info("User not found, auto-creating profile for user: {}", userId);
+                user = new User();
+                user.setId(userId);
+                // Try to get more info from authentication principal if possible
+                Object principal = authentication.getPrincipal();
+                if (principal instanceof org.springframework.security.oauth2.core.user.OAuth2User oauth2User) {
+                    user.setName((String) oauth2User.getAttribute("name"));
+                    user.setEmail((String) oauth2User.getAttribute("email"));
+                }
+                user.setRole("USER");
+                user.setSpecialties(java.util.Collections.emptyList());
+                user.setFavoriteRecipes(java.util.Collections.emptyList());
+                user.setFollowing(java.util.Collections.emptyList());
+                user.setBio("");
+                user.setPrivate(false);
+                user = userService.save(user);
             }
-            
             UserDTO userDTO = convertToDTO(user);
             logger.info("Successfully fetched profile for user: {}", userId);
             return ResponseEntity.ok(userDTO);
@@ -156,6 +178,35 @@ public class UserController {
             logger.error("Error fetching profile: {}", e.getMessage(), e);
             return ResponseEntity.internalServerError()
                     .body(Map.of("message", "Failed to fetch profile: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/profile/image")
+    public ResponseEntity<?> uploadProfileImage(@RequestParam("image") MultipartFile image, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(Map.of("message", "User not authenticated"));
+        }
+        String userId = authentication.getName();
+        try {
+            // Save file to local directory
+            String uploadDir = "uploads/profile-images/";
+            Files.createDirectories(Paths.get(uploadDir));
+            String originalFilename = StringUtils.cleanPath(image.getOriginalFilename());
+            String fileExtension = originalFilename.contains(".") ? originalFilename.substring(originalFilename.lastIndexOf('.')) : "";
+            String newFilename = userId + "_" + System.currentTimeMillis() + fileExtension;
+            Path targetPath = Paths.get(uploadDir).resolve(newFilename);
+            Files.copy(image.getInputStream(), targetPath, StandardCopyOption.REPLACE_EXISTING);
+            String imageUrl = "/" + uploadDir + newFilename;
+
+            // Update user profile
+            User user = userService.getUserById(userId);
+            user.setProfileImageUrl(imageUrl);
+            userService.save(user);
+
+            return ResponseEntity.ok(Map.of("profileImageUrl", imageUrl));
+        } catch (Exception e) {
+            logger.error("Error uploading profile image: {}", e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(Map.of("message", "Failed to upload image: " + e.getMessage()));
         }
     }
 
@@ -170,6 +221,7 @@ public class UserController {
         dto.setPrivate(user.isPrivate());
         dto.setFollowing(user.getFollowing());
         dto.setRole(user.getRole());
+        dto.setProfileImageUrl(user.getProfileImageUrl());
         return dto;
     }
 } 

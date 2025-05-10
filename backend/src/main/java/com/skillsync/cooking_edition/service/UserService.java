@@ -34,9 +34,7 @@ public class UserService {
         User existingUser = getUserById(userId);
         
         // Update only the provided fields
-        if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
-            existingUser.setName(updatedUser.getName());
-        }
+        // Name cannot be updated
         if (updatedUser.getBio() != null) {
             existingUser.setBio(updatedUser.getBio());
         }
@@ -48,6 +46,9 @@ public class UserService {
         }
         // Always update isPrivate as it's a boolean
         existingUser.setPrivate(updatedUser.isPrivate());
+        if (updatedUser.getProfileImageUrl() != null) {
+            existingUser.setProfileImageUrl(updatedUser.getProfileImageUrl());
+        }
         
         try {
             return userRepository.save(existingUser);

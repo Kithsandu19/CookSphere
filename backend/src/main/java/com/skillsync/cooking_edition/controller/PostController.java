@@ -107,7 +107,8 @@ public class PostController {
             @RequestParam(required = false) String[] amounts,
             @RequestParam(required = false) String[] instructions,
             @RequestParam(required = false) Integer cookingTime,
-            @RequestParam(required = false) Integer servings) {
+            @RequestParam(required = false) Integer servings,
+            @RequestParam(required = false) String category) {
         
         logger.info("Creating new post with title: {}", title);
         
@@ -184,6 +185,7 @@ public class PostController {
             post.setInstructions(instructions != null ? Arrays.asList(instructions) : null);
             post.setCookingTime(cookingTime);
             post.setServings(servings);
+            post.setCategory(category);
             post.setUserId(userId);
             post.setUserName(oauth2User.getAttribute("name"));
             post.setCreatedAt(LocalDateTime.now());
@@ -224,7 +226,8 @@ public class PostController {
             @RequestParam(required = false) String[] amounts,
             @RequestParam(required = false) String[] instructions,
             @RequestParam(required = false) Integer cookingTime,
-            @RequestParam(required = false) Integer servings) {
+            @RequestParam(required = false) Integer servings,
+            @RequestParam(required = false) String category) {
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof OAuth2User)) {
@@ -251,6 +254,7 @@ public class PostController {
                     post.setInstructions(instructions != null ? Arrays.asList(instructions) : null);
                     post.setCookingTime(cookingTime != null ? cookingTime : 0);
                     post.setServings(servings != null ? servings : 0);
+                    post.setCategory(category);
                     post.setUpdatedAt(LocalDateTime.now());
                     
                     // Handle file uploads if present
@@ -379,6 +383,25 @@ public class PostController {
             logger.error("Error testing MongoDB connection: {}", e.getMessage(), e);
             result.put("error", e.getMessage());
             return ResponseEntity.status(500).body(result);
+        }
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getCategories() {
+        try {
+            logger.info("Fetching unique categories from posts");
+            List<Post> posts = postRepository.findAll();
+            List<String> categories = posts.stream()
+                .map(Post::getCategory)
+                .filter(category -> category != null && !category.isEmpty())
+                .distinct()
+                .sorted()
+                .toList();
+            logger.info("Found {} unique categories", categories.size());
+            return ResponseEntity.ok(categories);
+        } catch (Exception e) {
+            logger.error("Error fetching categories: {}", e.getMessage(), e);
+            return ResponseEntity.status(500).body(null);
         }
     }
 

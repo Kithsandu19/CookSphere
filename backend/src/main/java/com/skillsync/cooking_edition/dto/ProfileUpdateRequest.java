@@ -11,4 +11,5 @@ public class ProfileUpdateRequest {
     private List<String> specialties;
     private List<String> favoriteRecipes;
     private boolean isPrivate;
+    private String profileImageUrl;
 } 

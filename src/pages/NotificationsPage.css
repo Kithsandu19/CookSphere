@@ -1,0 +1,124 @@
+.notifications-page {
+  max-width: 600px;
+  margin: 80px auto 0;
+  padding: 20px;
+}
+
+.notifications-page h1 {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.notifications-list {
+  background: white;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(60, 72, 88, 0.07);
+  border: 1px solid #f0f0f0;
+  transition: box-shadow 0.2s, background 0.2s;
+  cursor: pointer;
+}
+
+.notification-item:last-child {
+  margin-bottom: 0;
+}
+
+.notification-item:hover {
+  background-color: #f8fafc;
+  box-shadow: 0 6px 24px rgba(60, 72, 88, 0.16);
+}
+
+.notification-item.unread {
+  background-color: #f3f6fa;
+  border-color: #e0e7ef;
+}
+
+.notification-icon-wrapper {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.notification-icon {
+  font-size: 20px;
+}
+
+.notification-icon.like {
+  color: #ff3366;
+}
+
+.notification-icon.comment {
+  color: #0095f6;
+}
+
+.notification-icon.reply {
+  color: #8134af;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #999;
+  margin-top: 2px;
+  display: block;
+}
+
+.no-notifications {
+  padding: 40px 0;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.notifications-page.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  color: #999;
+  font-size: 14px;
+}
+
+.notification-delete-btn {
+  margin-left: 12px;
+  color: #ff3366;
+  background: #f8f8f8;
+  border-radius: 50%;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.notification-delete-btn:hover {
+  background: #ffe6ec;
+}
+
+@media (max-width: 768px) {
+  .notifications-page {
+    margin-top: 64px;
+    padding: 16px;
+  }
+} 

@@ -35,6 +35,7 @@ public class Post {
     private Integer servings = 0; // Number of servings
     private String userId;
     private String userName;
+    private String category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer likes = 0;
@@ -151,6 +152,14 @@ public class Post {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public LocalDateTime getCreatedAt() {

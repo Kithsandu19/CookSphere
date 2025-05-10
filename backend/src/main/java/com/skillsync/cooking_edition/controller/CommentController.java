@@ -1,6 +1,5 @@
 package com.skillsync.cooking_edition.controller;
 
-
 import com.skillsync.cooking_edition.model.Comment;
 import com.skillsync.cooking_edition.service.InteractionService;
 import org.springframework.beans.factory.annotation.Autowired;

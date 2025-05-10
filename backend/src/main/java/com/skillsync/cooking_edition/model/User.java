@@ -20,4 +20,5 @@ public class User {
     private boolean isPrivate;
     private List<String> following;
     private String role; // "USER" or "ADMIN"
+    private String profileImageUrl;
 }
