@@ -43,7 +43,7 @@ const Home = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')`,
+          background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://media.istockphoto.com/id/643847438/photo/restaurant-chilling-out-classy-lifestyle-reserved-concept.jpg?s=612x612&w=0&k=20&c=Rjw88cVSVaEIlCqBOizOGpqxp0kcYdoDRLwfv5Cn6Sw=')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           height: '80vh',
