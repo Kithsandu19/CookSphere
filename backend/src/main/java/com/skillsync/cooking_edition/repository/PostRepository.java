@@ -9,5 +9,4 @@ import com.skillsync.cooking_edition.model.Post;
 public interface PostRepository extends MongoRepository<Post, String> {
     List<Post> findByUserId(String userId);
     List<Post> findAllByOrderByCreatedAtDesc();
-    
 } 
